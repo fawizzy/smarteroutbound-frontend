@@ -17,26 +17,36 @@ const AddEmail = () => {
         { id: 3, name: "Register Mailboxes" },
     ];
 
-    // Load saved emails from localStorage when component mounts
-    useEffect(() => {
-        const savedStep = localStorage.getItem('currentEmailStep');
-        const savedEmails = localStorage.getItem('finalMailboxes');
-        
-        if (savedStep) {
-            setCurrentStep(parseInt(savedStep));
-        }
-        
-        if (savedEmails) {
-            try {
-                const parsedEmails = JSON.parse(savedEmails);
-                if (Array.isArray(parsedEmails) && parsedEmails.length > 0) {
-                    setEmailBoxes(parsedEmails);
-                }
-            } catch (error) {
-                console.error("Error parsing saved emails:", error);
+// Add this useEffect to clear the step when component unmounts
+useEffect(() => {
+    return () => {
+        // Clear the step when component unmounts
+        localStorage.removeItem('currentEmailStep');
+    };
+}, []);
+
+// Or modify your existing useEffect to check if the stored step is valid
+useEffect(() => {
+    const savedStep = localStorage.getItem('currentEmailStep');
+    const savedEmails = localStorage.getItem('finalMailboxes');
+    
+    // Only restore step if we also have valid email data
+    if (savedStep && savedEmails) {
+        try {
+            const parsedEmails = JSON.parse(savedEmails);
+            if (Array.isArray(parsedEmails) && parsedEmails.length > 0) {
+                setEmailBoxes(parsedEmails);
+                setCurrentStep(parseInt(savedStep));
+            } else {
+                // If we don't have valid emails, reset to step 1
+                localStorage.removeItem('currentEmailStep');
             }
+        } catch (error) {
+            console.error("Error parsing saved emails:", error);
+            localStorage.removeItem('currentEmailStep');
         }
-    }, []);
+    }
+}, []);
 
     // Update localStorage whenever step changes
     useEffect(() => {
