@@ -66,7 +66,6 @@ const AddDomain = () => {
     setRegistering(true);
     registerDomains(data.selectedDomains, data.redirectDomain)
       .then((response) => {
-        console.log("Domains registration response:", response);
         setRegistrationResults(response); // Save the API response
         setRegistering(false);
         setCurrentStep(3);

@@ -10,8 +10,8 @@ import EditMailbox from "../edit-mailboxes/editMailboxes";
 
 const EmailsDisplay = ({ emails, onDelete, onRegister }) => {
   // Default props if not provided
-  onDelete = onDelete || (() => console.log("Delete clicked"));
-  onRegister = onRegister || (() => console.log("Register emails clicked"));
+  onDelete = onDelete || (() => {});
+  onRegister = onRegister || (() =>{});
   
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingMailbox, setEditingMailbox] = useState(null);

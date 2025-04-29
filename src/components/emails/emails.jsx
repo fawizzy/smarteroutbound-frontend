@@ -1,24 +1,30 @@
 import React, { useState, useEffect } from "react";
 import EmailTableRow from "./emailRows";
 import { fetchWithAuth } from "../../utils/api";
+import { useNavigate } from "react-router-dom";
 
 const EmailTable = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [emails, setEmails] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   const getEmails = () => {
+    setIsLoading(true);
     fetchWithAuth(`${apiUrl}/api/user/emails`, {
       method: "GET",
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         if (data.detail.emails) {
           setEmails(data.detail.emails);
         }
       })
       .catch((error) => {
         console.error("Error:", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -26,11 +32,10 @@ const EmailTable = () => {
     getEmails();
   }, []);
 
-  if (emails.length > 0) {
-    console.log(emails.forEach((email) => console.log(email.id)));
-  }
+
+  
   const navigateToAddEmails = () => {
-    window.location.href = "/add-emails";
+    navigate("/add-emails");
   };
 
   const exportCSV = () => {
@@ -100,51 +105,57 @@ const EmailTable = () => {
                 <div className="grid grid-cols-1 p-4">
                   <div className="sm:-mx-6 lg:-mx-8">
                     <div className="relative overflow-x-auto block w-full sm:px-6 lg:px-8">
-                      <table
-                        className="w-full border-collapse"
-                        id="datatable_1"
-                      >
-                        <thead className="bg-gray-50 dark:bg-gray-600/20">
-                          <tr>
-                            <th
-                              scope="col"
-                              className="p-3 text-xs font-medium tracking-wider text-left text-gray-700 dark:text-gray-400 uppercase"
-                            >
-                              Email Account
-                            </th>
-                            <th
-                              scope="col"
-                              className="p-3 text-xs font-medium tracking-wider text-left text-gray-700 dark:text-gray-400 uppercase"
-                            >
-                              Domain
-                            </th>
-                            <th
-                              scope="col"
-                              className="p-3 text-xs font-medium tracking-wider text-left text-gray-700 dark:text-gray-400 uppercase"
-                            >
-                              Created
-                            </th>
-                            <th
-                              scope="col"
-                              className="p-3 text-xs font-medium tracking-wider text-left text-gray-700 dark:text-gray-400 uppercase"
-                            >
-                              Actions
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {emails &&
-                            emails.map((email) => (
-                              <EmailTableRow
-                                key={email.id}
-                                email={email.email_address}
-                                domain={email.domain_name}
-                                created={email.created_at}
-                                onDelete={handleDelete}
-                              />
-                            ))}
-                        </tbody>
-                      </table>
+                      {isLoading ? (
+                        <div className="flex justify-center items-center py-8">
+                          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                        </div>
+                      ) : (
+                        <table
+                          className="w-full border-collapse"
+                          id="datatable_1"
+                        >
+                          <thead className="bg-gray-50 dark:bg-gray-600/20">
+                            <tr>
+                              <th
+                                scope="col"
+                                className="p-3 text-xs font-medium tracking-wider text-left text-gray-700 dark:text-gray-400 uppercase"
+                              >
+                                Email Account
+                              </th>
+                              <th
+                                scope="col"
+                                className="p-3 text-xs font-medium tracking-wider text-left text-gray-700 dark:text-gray-400 uppercase"
+                              >
+                                Domain
+                              </th>
+                              <th
+                                scope="col"
+                                className="p-3 text-xs font-medium tracking-wider text-left text-gray-700 dark:text-gray-400 uppercase"
+                              >
+                                Created
+                              </th>
+                              <th
+                                scope="col"
+                                className="p-3 text-xs font-medium tracking-wider text-left text-gray-700 dark:text-gray-400 uppercase"
+                              >
+                                Actions
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {emails &&
+                              emails.map((email) => (
+                                <EmailTableRow
+                                  key={email.id}
+                                  email={email.email_address}
+                                  domain={email.domain_name}
+                                  created={email.created_at}
+                                  onDelete={handleDelete}
+                                />
+                              ))}
+                          </tbody>
+                        </table>
+                      )}
                     </div>
                   </div>
                 </div>

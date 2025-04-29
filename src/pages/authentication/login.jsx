@@ -31,7 +31,6 @@ const LoginPage = () => {
       localStorage.setItem("refreshToken", data.refresh);
       localStorage.setItem("is_admin", data.is_admin);
       const is_admin = data.is_admin;
-      console.log(typeof is_admin);
       if (is_admin) {
         window.location.href = "/admin-dashboard";
       } else {

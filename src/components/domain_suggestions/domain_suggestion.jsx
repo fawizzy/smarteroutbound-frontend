@@ -171,7 +171,6 @@ const DomainSuggestion = ({
       const data = await response.json();
       
       if (data.status === "success") {
-        console.log(data);
         const isAvailable = data.data[0].Available === "yes";
         setAvailabilityResults(prev => ({
           ...prev,
@@ -306,7 +305,7 @@ const DomainSuggestion = ({
         
         {available_slots === 0 && (
           <div className="mt-3 text-xs text-red-600 bg-red-50 p-2 rounded border border-red-100">
-            You've used all your available domain slots. Please buy more package for more domains.
+            You've used all your available domain slots. Please upgrade your plan for more domains.
           </div>
         )}
         

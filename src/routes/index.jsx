@@ -11,6 +11,7 @@ import AddEmail from "../pages/email/addEmail";
 import Billing from "../components/billing/billing";
 import AdminLoginPage from "../pages/authentication/adminLogin";
 import AdminDashboardPage from "../pages/dashboard/adminDashboard";
+import NotFound from "../pages/not-found/notFound";
 
 // ProtectedRoute component to check authentication
 const ProtectedRoute = () => {
@@ -53,7 +54,7 @@ const AppRoutes = () => {
           <Route path="/admin/login" element={<AdminLoginPage />} />
 
           {/* Protected routes */}
-        <Route element={<ProtectedRoute />}>
+        <Route >
           <Route path="/" element={is_admin == true ? <AdminDashboardPage/> : <DashboardPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/sidebar" element={<Sidebar />} />
@@ -65,7 +66,7 @@ const AppRoutes = () => {
         </Route>
 
         {/* Fallback route - redirects to login if not found */}
-        <Route path="*" element={<Navigate to="/login" />} />
+        <Route path="*" element={<NotFound/>} />
       </Routes>
     </BrowserRouter>
   );
