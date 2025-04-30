@@ -8,7 +8,9 @@ const SubscriptionNotification = () => {
   useEffect(() => {
     // Get URL parameters
     const urlParams = new URLSearchParams(window.location.search);
-    const subscriptionStatus = urlParams.get("subscription");
+    const subscriptionStatus = urlParams.get("subscription") || urlParams.get("subscription_change");
+    console.log("Subscription Status:", subscriptionStatus);
+
     
     if (subscriptionStatus === "success") {
       setNotification({
